@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+</head>
+
+<body>
+  <input type="file" id="fileInput">
+
+  <button class="publish-button" id="publish-button">PUBLISH</button>
+
+  <img id="ImgId" src="" style="width: 20%">
+  <script>
+    const fileInput = document.getElementById("fileInput");
+    fileInput.addEventListener("change", e => {
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.addEventListener("load", () => {
+        console.log(reader.result);
+
+      })
+      reader.readAsDataURL(file);
+
+      const publish = document.getElementById("publish-button");
+      publish.addEventListener("click", async _ => {
+        document.getElementById("ImgId").src = reader.result;
+        const results = reader.result;
+        try{
+          const response = await fetch("http://localhost:3000/imgStoreAndRetrieve", {
+            method: "POST",
+            body: "{"+results+"}",
+          });
+          console.log(response);
+        }
+        catch(err) {
+          console.log(err);
+        }
+
+      })
+    })
+
+
+  </script>
+
+
+</body>
+
+</html>

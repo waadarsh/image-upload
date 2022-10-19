@@ -2,49 +2,32 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Document</title>
 </head>
 
 <body>
-  <input type="file" id="fileInput">
-
-  <button class="publish-button" id="publish-button">PUBLISH</button>
-
-  <img id="ImgId" src="" style="width: 20%">
-  <script>
-    const fileInput = document.getElementById("fileInput");
-    fileInput.addEventListener("change", e => {
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-
-      reader.addEventListener("load", () => {
-        console.log(reader.result);
-
-      })
-      reader.readAsDataURL(file);
-
-      const publish = document.getElementById("publish-button");
-      publish.addEventListener("click", async _ => {
-        document.getElementById("ImgId").src = reader.result;
-        const results = reader.result;
+    <button id="button">Hello</button>
+    <script>
+        const button = document.getElementById("button");
+        button.addEventListener("click", () => {
+            console.log("hELLO");
         try{
-          const response = await fetch("http://localhost:3000/test", {
-            method: "POST",
-            body: "{"+results+"}",
-          });
-          console.log(response);
-        }
-        catch(err) {
-          console.log(err);
-        }
-
-      })
-    })
-
-
-  </script>
-
-
+            const ourRequest = $.ajax({
+                method: "POST",
+                url: "http://localhost:3000/test",
+                contentType: "application/json",
+                data: JSON.stringify({ templateName: "work station 1", stationName : "powertrain" })
+    
+            });
+            ourRequest.then((response) => {
+                console.log(response);
+            })
+        }catch(err){    console.error("err");}
+        });
+        
+        
+    </script>
 </body>
 
 </html>
