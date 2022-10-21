@@ -132,7 +132,7 @@ app.post('/test', (req, res) => {
                             console.log('Inside IF Part 3');
                             const chklstComponentProperty = `INSERT INTO chklst_component_property(chklst_component_id,property_name,property_value,property_type) VALUES ((SELECT MAX(chklst_component_id) FROM chklst_component),$1,$2,$3)`
                             const chklstComponentPropertyVal = await client.query(chklstComponentProperty,['innerHTML',data.workInstructions[i].workArea.inputField1,'display'])
-                            console.log('Input Field 1 completed');
+                            console.log('Input Field ',i+1,' completed');
                         }
                     }
                 }
