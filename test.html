@@ -12,21 +12,45 @@
         const button = document.getElementById("button");
         button.addEventListener("click", () => {
             console.log("hELLO");
-        try{
-            const ourRequest = $.ajax({
-                method: "POST",
-                url: "http://localhost:3000/test",
-                contentType: "application/json",
-                data: JSON.stringify({ templateName: "work station 1", stationName : "powertrain" })
-    
-            });
-            ourRequest.then((response) => {
-                console.log(response);
-            })
-        }catch(err){    console.error("err");}
+            try {
+                const ourRequest = $.ajax({
+                    method: "POST",
+                    url: "http://localhost:3000/test",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        templateName: "PowerTrain",
+                        stationName: "Assembly Line",
+                        totalNoOfInstruction: 2,
+                        workInstructions: [
+                            {
+                                index: 0,
+                                processName: "Engine Validation",
+                                checkLocation: "EG1",
+                                checkDetails: "Check Engine Specs",
+                                workArea: {
+                                    inputField1: "Eng1"
+                                }
+                            },
+                            {
+                                index: 1,
+                                processName: "Chassis Validation",
+                                checkLocation: "CH1",
+                                checkDetails: "Check Chassis Specs",
+                                workArea: {
+                                    inputField1: "CS1"
+                                }
+                            }
+                        ]
+                    })
+
+                });
+                ourRequest.then((response) => {
+                    console.log(response);
+                })
+            } catch (err) { console.error("err"); }
         });
-        
-        
+
+
     </script>
 </body>
 
