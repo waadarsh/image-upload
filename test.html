@@ -18,26 +18,26 @@
                     url: "http://localhost:3000/test",
                     contentType: "application/json",
                     data: JSON.stringify({
-                        templateName: "PowerTrain",
-                        stationName: "Assembly Line",
+                        templateName: "Vehicle Electronics",
+                        stationName: "Electric Line",
                         totalNoOfInstruction: 2,
                         workInstructions: [
                             {
                                 index: 0,
-                                processName: "Engine Validation",
-                                checkLocation: "EG1",
-                                checkDetails: "Check Engine Specs",
+                                processName: "Headlight",
+                                checkLocation: "Assembly 1",
+                                checkDetails: "Check Headlight",
                                 workArea: {
-                                    inputField1: "Eng1"
+                                    inputField1: "HD"
                                 }
                             },
                             {
                                 index: 1,
-                                processName: "Chassis Validation",
-                                checkLocation: "CH1",
-                                checkDetails: "Check Chassis Specs",
+                                processName: "Indicator",
+                                checkLocation: "Assembly 2",
+                                checkDetails: "Check Indicator",
                                 workArea: {
-                                    inputField1: "CS1"
+                                    inputField1: "ID"
                                 }
                             }
                         ]
