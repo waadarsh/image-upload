@@ -90,15 +90,37 @@ app.post('/index', (req, res) => {
                     for(let j = 0; j<key.length;j++){
                         console.log('inside for loop 2');
                         if(key[j] === 'inputField1'){
-                            console.log('Inside IF Part 1');
-                            const chklstComponent = `INSERT INTO chklst_component(chklst_dtl_id,base_component_id,composite_component) VALUES ((SELECT MAX(chklst_dtl_id) FROM chklst_dtl),(SELECT component_id FROM component WHERE component_name = 'inputField1' ),$1)`
+                            console.log('Inside IF | Checklist Component');
+                            const chklstComponent = `INSERT INTO chklst_component(chklst_dtl_id,base_component_id,composite_component) VALUES ((SELECT MAX(chklst_dtl_id) FROM chklst_dtl),(SELECT component_id FROM component WHERE component_name = 'inputField1' ),$1) RETURNING chklst_dtl_id,chklst_component_id`
                             const chklstComponentVal = await client.query(chklstComponent,['Y'])
-                            console.log('Inside IF Part 2');
-                            const chklstCompositeComponentMapping = `INSERT INTO chklst_composite_component_mapping(chklst_component_id,chklst_child_component_id) VALUES ((SELECT MAX(chklst_component_id) FROM chklst_component),(SELECT composite_component_mapping_id FROM composite_component_mapping WHERE composite_component_id IN (SELECT component_id FROM component WHERE component_name = 'inputField1') AND child_component_id = 1))`
-                            const chklstCompositeComponentMappingVal = await client.query(chklstCompositeComponentMapping)
-                            console.log('Inside IF Part 3');
-                            const chklstComponentProperty = `INSERT INTO chklst_component_property(chklst_component_id,property_name,property_value,property_type) VALUES ((SELECT MAX(chklst_component_id) FROM chklst_component),$1,$2,$3)`
-                            const chklstComponentPropertyVal = await client.query(chklstComponentProperty,['innerHTML',data.workInstructions[i].workArea.inputField1,'display'])
+                            let chklstDetId = chklstComponentVal.rows[0].chklst_dtl_id;
+                            let chklstCompId = chklstComponentVal.rows[0].chklst_component_id;
+                            console.log(chklstDetId,chklstCompId);
+                            console.log('Execution successful');
+                            const chklstComponentLabel = `INSERT INTO chklst_component(base_component_id,chklst_dtl_id,composite_component) VALUES ((SELECT component_id FROM component WHERE component_name = 'p_label' ),$1,$2) RETURNING chklst_component_id`
+                            const chklstComponentLabelVal = await client.query(chklstComponentLabel,[chklstDetId,'N'])
+                            let chklstLabelId = chklstComponentLabelVal.rows[0].chklst_component_id;
+                            console.log(chklstLabelId);
+                            console.log('Label inserted successfully');
+                            const chklstComponentInput = `INSERT INTO chklst_component(base_component_id,chklst_dtl_id,composite_component) VALUES ((SELECT component_id FROM component WHERE component_name = 'input' ),$1,$2) RETURNING chklst_component_id`
+                            const chklstComponentInputVal = await client.query(chklstComponentInput,[chklstDetId,'N'])
+                            let chklstInputId = chklstComponentInputVal.rows[0].chklst_component_id;
+                            console.log(chklstInputId);
+                            console.log('Input inserted successfully');
+                            console.log('Inside IF | Checklist Composite Component Mapping');
+                            const chklstCompositeComponentMapping1 = `INSERT INTO chklst_composite_component_mapping(chklst_component_id,chklst_child_component_id) VALUES ($1,$2)`
+                            const chklstCompositeComponentMappingVal1 = await client.query(chklstCompositeComponentMapping1,[chklstCompId,chklstLabelId])
+                            console.log('Checklist Composite Component Mapping Part1 Successful');
+                            const chklstCompositeComponentMapping2 = `INSERT INTO chklst_composite_component_mapping(chklst_component_id,chklst_child_component_id) VALUES ($1,$2)`
+                            const chklstCompositeComponentMappingVal2 = await client.query(chklstCompositeComponentMapping2,[chklstCompId,chklstInputId])
+                            console.log('Checklist Composite Component Mapping Part2 Successful');
+                            console.log('Inside IF | Checklist Component Property');
+                            const chklstComponentProperty1 = `INSERT INTO chklst_component_property(chklst_component_id,property_name,property_value,property_type) VALUES ($1,$2,$3,$4)`
+                            const chklstComponentPropertyVal1 = await client.query(chklstComponentProperty1,[chklstLabelId,'innerHTML',data.workInstructions[i].workArea.inputField1,'display'])
+                            console.log('Label Property Inserted Successfully')
+                            const chklstComponentProperty2 = `INSERT INTO chklst_component_property(chklst_component_id,property_name,property_value,property_type) VALUES ($1,$2,$3,$4)`
+                            const chklstComponentPropertyVal2 = await client.query(chklstComponentProperty2,[chklstInputId,'value','NULL','input'])
+                            console.log('Input Property Inserted Successfully')
                             console.log('Input Field ',i+1,' completed');
                         }
                     }
@@ -107,7 +129,7 @@ app.post('/index', (req, res) => {
                 console.log('COMMIT Successful'); 
 
         } catch (e) {
-            await client.query('ROLLBACK');
+            await client.query('ROLLBACK ');
             console.log('ROLLBACK',e)
             throw e;
         } finally {
