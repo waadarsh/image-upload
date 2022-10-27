@@ -14,7 +14,7 @@ app.listen(3000, () => {
 });
 
 app.use("/static", express.static("static"));
-app.use("/Admin", express.static("static"));
+app.use("/Admin", express.static("Admin"));
 
 
 const cn = {
