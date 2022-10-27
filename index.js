@@ -113,10 +113,10 @@ app.post('/index', (req, res) => {
                             console.log('Inside IF | Checklist Composite Component Mapping');
                             const chklstCompositeComponentMapping1 = `INSERT INTO chklst_composite_component_mapping(chklst_component_id,chklst_child_component_id) VALUES ($1,$2)`
                             const chklstCompositeComponentMappingVal1 = await client.query(chklstCompositeComponentMapping1,[chklstCompId,chklstLabelId])
-                            console.log('Checklist Composite Component Mapping Part1 Successful');
+                            console.log('Checklist Composite Component Mapping Part 1',key[j],' Successful');
                             const chklstCompositeComponentMapping2 = `INSERT INTO chklst_composite_component_mapping(chklst_component_id,chklst_child_component_id) VALUES ($1,$2)`
                             const chklstCompositeComponentMappingVal2 = await client.query(chklstCompositeComponentMapping2,[chklstCompId,chklstInputId])
-                            console.log('Checklist Composite Component Mapping Part2 Successful');
+                            console.log('Checklist Composite Component Mapping Part 2 ',key[j],' Successful');
                             console.log('Inside IF | Checklist Component Property');
                             const chklstComponentProperty1 = `INSERT INTO chklst_component_property(chklst_component_id,property_name,property_value,property_type) VALUES ($1,$2,$3,$4)`
                             if(key[j] === 'inputField1') {
