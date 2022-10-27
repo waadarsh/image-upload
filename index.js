@@ -89,9 +89,15 @@ app.post('/index', (req, res) => {
                     console.log('Inside For loop 1');
                     for(let j = 0; j<key.length;j++){
                         console.log('inside for loop 2');
-                        if(key[j] === 'inputField1'){
+                        if(key[j] === 'inputField1' || key[j] === 'inputField2'){
                             console.log('Inside IF | Checklist Component');
-                            const chklstComponent = `INSERT INTO chklst_component(chklst_dtl_id,base_component_id,composite_component) VALUES ((SELECT MAX(chklst_dtl_id) FROM chklst_dtl),(SELECT component_id FROM component WHERE component_name = 'inputField1' ),$1) RETURNING chklst_dtl_id,chklst_component_id`
+                            let chklstComponent;
+                            if(key[j] === 'inputField1') {
+                                chklstComponent = `INSERT INTO chklst_component(chklst_dtl_id,base_component_id,composite_component) VALUES ((SELECT MAX(chklst_dtl_id) FROM chklst_dtl),(SELECT component_id FROM component WHERE component_name = 'inputField1' ),$1) RETURNING chklst_dtl_id,chklst_component_id`
+                            }
+                            if(key[j] === 'inputField2') {
+                                chklstComponent = `INSERT INTO chklst_component(chklst_dtl_id,base_component_id,composite_component) VALUES ((SELECT MAX(chklst_dtl_id) FROM chklst_dtl),(SELECT component_id FROM component WHERE component_name = 'inputField2' ),$1) RETURNING chklst_dtl_id,chklst_component_id`
+                            }
                             const chklstComponentVal = await client.query(chklstComponent,['Y'])
                             let chklstDetId = chklstComponentVal.rows[0].chklst_dtl_id;
                             let chklstCompId = chklstComponentVal.rows[0].chklst_component_id;
@@ -121,7 +127,7 @@ app.post('/index', (req, res) => {
                             const chklstComponentProperty2 = `INSERT INTO chklst_component_property(chklst_component_id,property_name,property_value,property_type) VALUES ($1,$2,$3,$4)`
                             const chklstComponentPropertyVal2 = await client.query(chklstComponentProperty2,[chklstInputId,'value','NULL','input'])
                             console.log('Input Property Inserted Successfully')
-                            console.log('Input Field ',i+1,' completed');
+                            console.log(k[j],' completed');
                         }
                     }
                 }
