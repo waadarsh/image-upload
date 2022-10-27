@@ -8,7 +8,6 @@ var utf8 = require('utf8');
 const path = require('path');
 const bodyParser = require('body-parser');
 const { application } = require('express');
-const { dirxml } = require('console');
 
 app.listen(3000, () => {
     console.log('listening on port 3000');
